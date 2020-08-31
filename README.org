@@ -8,6 +8,17 @@ So, for now I've the dislay only on the left half.
 
 [[./lily58.jpg]]
 
+I wrote a simple C program to send message to the keyboard, the
+message are showed at a specified line.
+For example
+
+#+begin_src shell
+./toLily 0 "Hello world!"
+#+end_src
+
+shows at the first line (the lines are indexed by 0, 1, 2, 3) the
+message "Hello world!"
+
 
 ** Installation
 
@@ -20,6 +31,7 @@ rules are set, to compile and flash my custom firmware do the following:
   - Connect the left half and ~make lily58:aciceri:flash~
   - Connect the right half and ~make lily58:aciceri:flash
     OLED_DRIVER_ENABLE=false~
+- Optional: build ~toLily~ with ~gcc toLily.c -lhidapi-hidraw -o toLily~
 
 
 ** What's next
@@ -30,11 +42,10 @@ My workflow is keyboard centric but it could be cool to control the
 mouse using the keyboard
 
 
-*** TODO RAW hid
+*** TODO RAW hid (work in progress)
 
 Using the HID protocol it's possible to send information to the
 keyboard's display to visualize things like the current track title or
 the current Emacs modes.
- 
 
 

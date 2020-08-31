@@ -8,6 +8,8 @@
   #include "ssd1306.h"
 #endif
 
+#include "raw_hid.h"
+
 extern uint8_t is_master;
 
 enum layer_number {
@@ -86,13 +88,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 };
 
-// Setting ADJUST layer RGB back to default
-void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
-  if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) {
-    layer_on(layer3);
-  } else {
-    layer_off(layer3);
-  }
+
+bool hid_started = false;
+char msg[4][20];
+
+void raw_hid_receive(unsigned char *data, uint8_t length) {
+  hid_started = true;
+  for (int i=0; i<19; i++)
+    msg[data[0]][i] = data[i+1];
+  msg[data[0]][19] = '\0';
 }
 
 //SSD1306 OLED update loop, make sure to enable OLED_DRIVER_ENABLE=yes in rules.mk
@@ -119,9 +123,19 @@ const char *read_keylogs(void);
 void oled_task_user(void) {
   if (is_keyboard_master()) {
     // If you want to change the display of OLED, you need to change here
-    oled_write_ln(read_layer_state(), false);
-    oled_write_ln(read_keylog(), false);
-    oled_write_ln(read_keylogs(), false);
+    //oled_write_ln(read_layer_state(), false);
+
+    if (hid_started) {
+      oled_write_ln(msg[0], false);
+      oled_write_ln(msg[1], false);
+      oled_write_ln(msg[2], false);
+      oled_write_ln(msg[3], false);
+    }
+    else {
+      oled_write(read_logo(), false);
+    }
+    //oled_write_ln(read_keylog(), false);
+    //oled_write_ln(read_keylogs(), false);
     //oled_write_ln(read_mode_icon(keymap_config.swap_lalt_lgui), false);
     //oled_write_ln(read_host_led_state(), false);
     //oled_write_ln(read_timelog(), false);
