@@ -1,0 +1,40 @@
+* My Lily58's keymap
+
+Here is my custom keymap for my Lily58 keyboard, powered by the the
+QMK firmware.
+I accidentaly broke a Oled display but I had already bridged the
+connections on the right half PCB, enabling it.
+So, for now I've the dislay only on the left half.
+
+[[./lily58.jpg]]
+
+
+** Installation
+
+Assuming that the QMK toolbox is installed and that the correct udev
+rules are set, to compile and flash my custom firmware do the following:
+
+- Clone this repository inside the QMK folder, naming it
+  e.g. ~keyboards/lily58/keymaps/aciceri~
+- In the QMK folder:
+  - Connect the left half and ~make lily58:aciceri:flash~
+  - Connect the right half and ~make lily58:aciceri:flash
+    OLED_DRIVER_ENABLE=false~
+
+
+** What's next
+
+*** TODO Mouse keys
+
+My workflow is keyboard centric but it could be cool to control the
+mouse using the keyboard
+
+
+*** TODO RAW hid
+
+Using the HID protocol it's possible to send information to the
+keyboard's display to visualize things like the current track title or
+the current Emacs modes.
+ 
+
+
